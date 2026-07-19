@@ -1,3 +1,11 @@
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 10800000
+
+server:
+  port: 8081
+
 spring:
   datasource:
     url: ${DB_URL_SPENDINGS}
@@ -10,3 +18,7 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: update
+
+logging:
+  level:
+    org.springframework.security: DEBUG
