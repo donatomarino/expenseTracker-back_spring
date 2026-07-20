@@ -15,7 +15,7 @@ import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@RequestMapping("/api/spendings")
 public class SpendingController {
 
   private final ISpendingService spendingService;
@@ -29,7 +29,7 @@ public class SpendingController {
    * @return ResponseEntity containing the user's spending for the specified month and year
    * @throws ResponseStatusException if month is not between 1 and 12
    */
-  @GetMapping("/spendings/month")
+  @GetMapping("/month")
   public ResponseEntity<GetSpendingResponse> getSpendingsByMonth(Authentication authentication,
                                                                  @RequestParam("year") Integer year,
                                                                  @RequestParam("month") Integer month
@@ -51,7 +51,7 @@ public class SpendingController {
    * @return ResponseEntity containing the user's spendings within the specified date range
    * @throws ResponseStatusException if startDate is after endDate
    */
-  @GetMapping("/spendings/range")
+  @GetMapping("/range")
   public ResponseEntity<GetSpendingResponse> getSpendingsByDate(Authentication authentication,
                                                                 @RequestParam("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                                                 @RequestParam("endDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
@@ -71,7 +71,7 @@ public class SpendingController {
    * @param request        request body containing the new spending data
    * @return ResponseEntity containing the new created spending
    */
-  @PostMapping("/spendings")
+  @PostMapping
   public ResponseEntity<SpendingResponse> addSpending(Authentication authentication,
                                                       @Valid @RequestBody CreateSpendingRequest request
   ) {
@@ -88,7 +88,7 @@ public class SpendingController {
    * @param request request body containing the update spending data
    * @return ResponseEntity containing the update spending
    */
-  @PutMapping("/spendings/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<SpendingResponse> updateSpending(Authentication authentication,
                                                                @PathVariable Long id,
                                                                @Valid @RequestBody UpdateSpendingRequest request
