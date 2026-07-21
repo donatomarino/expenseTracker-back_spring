@@ -18,77 +18,66 @@ import java.time.YearMonth;
 @RequiredArgsConstructor
 public class SpendingServiceImpl implements ISpendingService {
 
-  private final SpendingRepository spendingRepository;
+    private final SpendingRepository spendingRepository;
 
-  @Override
-  @Transactional(readOnly = true)
-  public GetSpendingResponse getSpendingsByUserIdAndMonth(Long userId, Integer year, Integer month) {
-    YearMonth yearMonth;
-    try {
-      yearMonth = YearMonth.of(year, month);
-    } catch (DateTimeException e) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid year or month");
+    @Override
+    @Transactional(readOnly = true)
+    public GetSpendingResponse getSpendingsByUserIdAndMonth(Long userId, Integer year, Integer month) {
+        YearMonth yearMonth;
+        try {
+            yearMonth = YearMonth.of(year, month);
+        } catch (DateTimeException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid year or month");
+        }
+
+        LocalDate startDate = yearMonth.atDay(1);
+        LocalDate endDate = yearMonth.atEndOfMonth();
+        return getSpendingsByUserIdAndDateRange(userId, startDate, endDate);
     }
 
-    LocalDate startDate = yearMonth.atDay(1);
-    LocalDate endDate = yearMonth.atEndOfMonth();
-    return getSpendingsByUserIdAndDateRange(userId, startDate, endDate);
-  }
+    @Override
+    @Transactional(readOnly = true)
+    public GetSpendingResponse getSpendingsByUserIdAndDateRange(Long userId, LocalDate startDate, LocalDate endDate) {
+        return new GetSpendingResponse(this.spendingRepository.findByUserIdAndSpendingDateBetween(userId, startDate, endDate).stream().map(s -> new SpendingResponse(s.id(), s.description(), s.amount(), s.paymentMethod(), s.spendingDate())).toList());
+    }
 
-  @Override
-  @Transactional(readOnly = true)
-  public GetSpendingResponse getSpendingsByUserIdAndDateRange(Long userId, LocalDate startDate, LocalDate endDate) {
-    return new GetSpendingResponse(this.spendingRepository.findByUserIdAndSpendingDateBetween(userId, startDate, endDate)
-      .stream()
-      .map(s -> new SpendingResponse(
-        s.id(),
-        s.description(),
-        s.amount(),
-        s.paymentMethod(),
-        s.spendingDate()
-      ))
-      .toList()
-    );
-  }
+    @Override
+    @Transactional
+    public SpendingResponse addNewSpending(Long userId, CreateSpendingRequest request) {
+        Spending newSpending = Spending.builder().userId(userId).description(request.description()).amount(request.amount()).paymentMethod(request.paymentMethod()).spendingDate(request.spendingDate()).build();
 
-  @Override
-  @Transactional
-  public SpendingResponse addNewSpending(Long userId, CreateSpendingRequest request) {
-    Spending newSpending = Spending.builder()
-      .userId(userId)
-      .description(request.description())
-      .amount(request.amount())
-      .paymentMethod(request.paymentMethod())
-      .spendingDate(request.spendingDate())
-      .build();
+        return saveSpending(newSpending);
+    }
 
-    return saveSpending(newSpending);
-  }
+    @Override
+    @Transactional
+    public SpendingResponse updateSpendingById(Long userId, Long spendingId, UpdateSpendingRequest request) {
+        Spending spending = findSpendingByIdAndUser(spendingId, userId);
 
-  @Override
-  @Transactional
-  public SpendingResponse updateSpendingById(Long userId, Long spendingId, UpdateSpendingRequest request) {
-    Spending spending = this.spendingRepository.findByIdAndUserId(spendingId, userId)
-      .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "The expense does not belong to this user"));
+        // Update data
+        spending.setDescription(request.description());
+        spending.setAmount(request.amount());
+        spending.setPaymentMethod(request.paymentMethod());
+        spending.setSpendingDate(request.spendingDate());
 
-    // Update data
-    spending.setDescription(request.description());
-    spending.setAmount(request.amount());
-    spending.setPaymentMethod(request.paymentMethod());
-    spending.setSpendingDate(request.spendingDate());
+        return saveSpending(spending);
+    }
 
-    return saveSpending(spending);
-  }
+    @Override
+    @Transactional
+    public void deleteSpending(Long userId, Long spendingId) {
+        Spending spending = findSpendingByIdAndUser(spendingId, userId);
+        this.spendingRepository.delete(spending);
+    }
 
-  private SpendingResponse saveSpending(Spending spending) {
-    Spending savedSpending = this.spendingRepository.save(spending);
+    private SpendingResponse saveSpending(Spending spending) {
+        Spending savedSpending = this.spendingRepository.save(spending);
 
-    return new SpendingResponse(
-      savedSpending.getId(),
-      savedSpending.getDescription(),
-      savedSpending.getAmount(),
-      savedSpending.getPaymentMethod(),
-      savedSpending.getSpendingDate()
-    );
-  }
+        return new SpendingResponse(savedSpending.getId(), savedSpending.getDescription(), savedSpending.getAmount(), savedSpending.getPaymentMethod(), savedSpending.getSpendingDate());
+    }
+
+    private Spending findSpendingByIdAndUser(Long spendingId, Long userId) {
+        return this.spendingRepository.findByIdAndUserId(spendingId, userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Spending not found for this user"));
+    }
 }

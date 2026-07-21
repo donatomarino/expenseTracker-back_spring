@@ -9,4 +9,5 @@ public interface ISpendingService {
   GetSpendingResponse getSpendingsByUserIdAndDateRange(Long userId, LocalDate startDate, LocalDate endDate);
   SpendingResponse addNewSpending(Long userId, CreateSpendingRequest request);
   SpendingResponse updateSpendingById(Long userId, Long spendingId, UpdateSpendingRequest request);
+  void deleteSpending(Long userId, Long spendingId);
 }
