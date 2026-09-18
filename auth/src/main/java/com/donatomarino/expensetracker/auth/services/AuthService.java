@@ -3,6 +3,7 @@ package com.donatomarino.expensetracker.auth.services;
 import com.donatomarino.expensetracker.auth.dtos.AuthRequest;
 import com.donatomarino.expensetracker.auth.dtos.AuthResponse;
 import com.donatomarino.expensetracker.auth.dtos.RegisterRequest;
+import com.donatomarino.expensetracker.auth.dtos.RegisterResponse;
 import com.donatomarino.expensetracker.auth.entities.User;
 import com.donatomarino.expensetracker.auth.repositories.UserRepository;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 @Service
@@ -40,7 +42,17 @@ public class AuthService {
    * @return JWT token
    */
   @Transactional
-  public AuthResponse register(@Valid RegisterRequest request) {
+  public RegisterResponse register(@Valid RegisterRequest request) {
+    // Normalize full name
+    String normalizedFullName = request.fullName()
+      .trim()
+      .replaceAll("\\s+", " ");
+
+    // Normalize email
+    String normalizedEmail = request.email()
+      .trim()
+      .toLowerCase(Locale.ROOT);
+
     // Check that email is not already in use
     if (userRepository.existsByEmail(request.email())) {
       throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already in use");
@@ -48,16 +60,14 @@ public class AuthService {
 
     // Create user using Lombok builder
     User user = User.builder()
-      .fullName(request.fullName())
-      .email(request.email())
+      .fullName(normalizedFullName)
+      .email(normalizedEmail)
       .password(passwordEncoder.encode(request.password()))
       .build();
 
     userRepository.save(user);
 
-    // Generate token
-    String jwtToken = generateToken(user);
-    return new AuthResponse(jwtToken, jwtExpiration);
+    return new RegisterResponse("User registered successfully", true);
   }
 
   /**
@@ -78,11 +88,12 @@ public class AuthService {
     }
 
     User user = findUserByEmail(request.email());
+    String name = user.getFullName().split(" ")[0];
 
     // Generate token
     String jwtToken = generateToken(user);
 
-    return new AuthResponse(jwtToken, jwtExpiration);
+    return new AuthResponse(jwtToken, name, jwtExpiration);
   }
 
   /**
@@ -100,10 +111,11 @@ public class AuthService {
     String userEmail = jwtService.getUsername(oldToken);
 
     User user = findUserByEmail(userEmail);
+    String name = user.getFullName().split(" ")[0];
 
     // Generate new token
     String newToken = generateToken(user);
-    return new AuthResponse(newToken, jwtExpiration);
+    return new AuthResponse(newToken, name, jwtExpiration);
   }
 
   /**

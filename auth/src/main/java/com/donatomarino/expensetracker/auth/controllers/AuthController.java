@@ -3,6 +3,7 @@ package com.donatomarino.expensetracker.auth.controllers;
 import com.donatomarino.expensetracker.auth.dtos.AuthRequest;
 import com.donatomarino.expensetracker.auth.dtos.AuthResponse;
 import com.donatomarino.expensetracker.auth.dtos.RegisterRequest;
+import com.donatomarino.expensetracker.auth.dtos.RegisterResponse;
 import com.donatomarino.expensetracker.auth.services.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class AuthController {
    * @return ResponseEntity con el token JWT generado para el nuevo usuario o un error si el mail ya está en uso
    */
   @PostMapping("/register")
-  public ResponseEntity<AuthResponse> register(
+  public ResponseEntity<RegisterResponse> register(
     @Valid @RequestBody RegisterRequest request
   ) {
     return ResponseEntity.ok(this.authService.register(request));
