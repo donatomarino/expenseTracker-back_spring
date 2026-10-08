@@ -21,6 +21,6 @@ public record UpdateSpendingRequest(
 
   @NotNull(message = "Spending date is required")
   @PastOrPresent(message = "Spending date cannot be in the future")
-  LocalDate spendingDate
+  LocalDate date
 ) {
 }

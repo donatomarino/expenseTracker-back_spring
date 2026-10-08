@@ -7,8 +7,9 @@ public record GetSpendingResponse (
   int page,
   int size,
   long totalElements,
-  int totalPage,
+  int totalPages,
   boolean first,
-  boolean last
+  boolean last,
+  SpendingStatistics statistics
 ) {
 }

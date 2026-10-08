@@ -10,6 +10,6 @@ public record SpendingResponse(
   String description,
   BigDecimal amount,
   PaymentMethod paymentMethod,
-  LocalDate spendingDate
+  LocalDate date
 ) {
 }

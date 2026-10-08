@@ -5,6 +5,7 @@ import com.donatomarino.expensetracker.expenseservice.entities.Spending;
 import com.donatomarino.expensetracker.expenseservice.enums.PaymentMethod;
 import com.donatomarino.expensetracker.expenseservice.enums.SpendingSort;
 import com.donatomarino.expensetracker.expenseservice.repositories.SpendingRepository;
+import com.donatomarino.expensetracker.expenseservice.repositories.projection.SpendingStatisticsProjection;
 import com.donatomarino.expensetracker.expenseservice.services.interfaces.ISpendingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -110,6 +111,22 @@ public class SpendingServiceImpl implements ISpendingService {
       sortedPageable
     );
 
+    SpendingStatisticsProjection statistics = spendingRepository.findStatisticsByFilters(
+      userId,
+      startDate,
+      endDate,
+      paymentMethod,
+      minAmount,
+      maxAmount,
+      search
+    );
+
+    SpendingStatistics spendingStatistics = new SpendingStatistics(
+      statistics.getTotalSpent(),
+      statistics.getTotalTransactions(),
+      statistics.getAverage()
+    );
+
     return new GetSpendingResponse(
       spending.getContent(),
       spending.getNumber() + 1,
@@ -117,7 +134,8 @@ public class SpendingServiceImpl implements ISpendingService {
       spending.getTotalElements(),
       spending.getTotalPages(),
       spending.isFirst(),
-      spending.isLast()
+      spending.isLast(),
+      spendingStatistics
     );
   }
 
@@ -144,7 +162,7 @@ public class SpendingServiceImpl implements ISpendingService {
       .description(request.description())
       .amount(request.amount())
       .paymentMethod(request.paymentMethod())
-      .spendingDate(request.spendingDate())
+      .spendingDate(request.date())
       .build();
 
     return saveSpending(newSpending);
@@ -159,7 +177,7 @@ public class SpendingServiceImpl implements ISpendingService {
     spending.setDescription(request.description());
     spending.setAmount(request.amount());
     spending.setPaymentMethod(request.paymentMethod());
-    spending.setSpendingDate(request.spendingDate());
+    spending.setSpendingDate(request.date());
 
     return saveSpending(spending);
   }
