@@ -53,9 +53,10 @@ public class SecurityConfig {
   public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
 
-    configuration.setAllowedOrigins(
-      List.of("http://localhost:5173")
-    );
+    configuration.setAllowedOrigins(List.of(
+      "http://localhost:5173",
+      "https://expense-tracker-front-ze25.vercel.app"
+    ));
 
     configuration.setAllowedMethods(
       List.of("POST")
