@@ -9,8 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.donatomarino.expensetracker</groupId>
-	<artifactId>expenseservice</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>expense_service</artifactId>
+	<version>0.0.1</version>
 	<name/>
 	<description/>
 	<url/>
