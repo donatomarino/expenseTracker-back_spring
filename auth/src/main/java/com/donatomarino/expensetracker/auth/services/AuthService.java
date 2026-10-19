@@ -54,7 +54,7 @@ public class AuthService {
       .toLowerCase(Locale.ROOT);
 
     // Check that email is not already in use
-    if (userRepository.existsByEmail(request.email())) {
+    if (userRepository.existsByEmail(normalizedEmail)) {
       throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already in use");
     }
 

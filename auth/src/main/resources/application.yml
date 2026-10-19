@@ -1,0 +1,21 @@
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 10800000
+
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: ${DB_URL_AUTH}
+    username: ${DB_USER_AUTH}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+
+logging:
+  level:
+    org.springframework.security: INFO

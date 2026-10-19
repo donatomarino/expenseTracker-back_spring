@@ -1,6 +1,7 @@
 package com.donatomarino.expensetracker.auth.services;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -16,11 +17,16 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-  @Value("${app.jwt.secret}")
-  private String secretKey;
+  private final String secretKey;
+  private final long jwtExpiration;
 
-  @Value("${app.jwt.expiration:86400000}")
-  private long jwtExpiration;
+  public JwtService(
+    @Value("${app.jwt.secret}") String secretKey,
+    @Value("${app.jwt.expiration:86400000}") long jwtExpiration
+  ) {
+    this.secretKey = secretKey;
+    this.jwtExpiration = jwtExpiration;
+  }
 
   // Generate token with custom claims
   public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
@@ -45,8 +51,12 @@ public class JwtService {
 
   // Validates the token
   public boolean isTokenValid(String token, UserDetails userDetails) {
-    final String username = getUsername(token);
-    return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    try {
+      final String username = getUsername(token);
+      return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    } catch (JwtException | IllegalArgumentException e) {
+      return false;
+    }
   }
 
   // Checks if the token has expired

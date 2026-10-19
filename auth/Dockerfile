@@ -2,7 +2,7 @@ FROM maven:3.9.9-eclipse-temurin-17-alpine AS build
 WORKDIR /app
 
 COPY . .
-RUN ./mvnw -DskipTests package
+RUN ./mvnw package
 
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /
