@@ -1,6 +1,7 @@
 package com.donatomarino.expensetracker.auth.security.filter;
 
-import com.donatomarino.expensetracker.auth.services.JwtService;
+import com.donatomarino.expensetracker.auth.services.impl.JwtService;
+import com.donatomarino.expensetracker.auth.services.interfaces.IJwtService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -22,7 +23,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-  private final JwtService jwtService;
+  private final IJwtService jwtService;
   private final UserDetailsService userDetailsService;
 
   @Override

@@ -4,8 +4,9 @@ import com.donatomarino.expensetracker.auth.dtos.AuthRequest;
 import com.donatomarino.expensetracker.auth.dtos.AuthResponse;
 import com.donatomarino.expensetracker.auth.dtos.RegisterRequest;
 import com.donatomarino.expensetracker.auth.dtos.RegisterResponse;
-import com.donatomarino.expensetracker.auth.services.AuthService;
-import com.donatomarino.expensetracker.auth.services.JwtService;
+import com.donatomarino.expensetracker.auth.services.impl.JwtService;
+import com.donatomarino.expensetracker.auth.services.interfaces.IAuthService;
+import com.donatomarino.expensetracker.auth.services.interfaces.IJwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,13 @@ import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,10 +33,13 @@ public class AuthControllerTest {
   private MockMvc mockMvc;
 
   @MockitoBean
-  private AuthService authService;
+  private IAuthService authService;
 
   @MockitoBean
-  private JwtService jwtService;
+  private IJwtService iJwtService;
+
+  @MockitoBean
+  private UserDetailsService userDetailsService;
 
   private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -62,6 +67,8 @@ public class AuthControllerTest {
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.message").value("User registered successfully"))
       .andExpect(jsonPath("$.success").value(true));
+
+    verify(authService).register(any(RegisterRequest.class));
   }
 
   @Test
@@ -76,6 +83,8 @@ public class AuthControllerTest {
         .contentType(MediaType.APPLICATION_JSON)
         .content(asJsonString(registerRequest)))
       .andExpect(status().isBadRequest());
+
+    verify(authService, never()).register(any(RegisterRequest.class));
   }
 
   @Test
@@ -111,6 +120,8 @@ public class AuthControllerTest {
       .andExpect(jsonPath("$.access_token").value("jwt-token"))
       .andExpect(jsonPath("$.user_name").value("D"))
       .andExpect(jsonPath("$.expiresIn").value(86400000));
+
+    verify(authService).authenticate(any(AuthRequest.class));
   }
 
   @Test

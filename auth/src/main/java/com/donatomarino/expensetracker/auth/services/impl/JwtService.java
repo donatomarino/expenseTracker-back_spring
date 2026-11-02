@@ -1,5 +1,6 @@
-package com.donatomarino.expensetracker.auth.services;
+package com.donatomarino.expensetracker.auth.services.impl;
 
+import com.donatomarino.expensetracker.auth.services.interfaces.IJwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -15,7 +16,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtService implements IJwtService {
 
   private final String secretKey;
   private final long jwtExpiration;

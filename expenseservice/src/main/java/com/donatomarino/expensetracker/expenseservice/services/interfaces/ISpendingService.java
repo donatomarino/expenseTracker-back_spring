@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface ISpendingService {
   GetSpendingResponse getSpendingsByUserIdAndFilters(Long userId, SpendingFilterRequest filters, Pageable pageable);
-  SpendingResponse addNewSpending(Long userId, CreateSpendingRequest request);
-  SpendingResponse updateSpendingById(Long userId, Long spendingId, UpdateSpendingRequest request);
+  SpendingResponse addNewSpending(Long userId, SpendingRequest request);
+  SpendingResponse updateSpendingById(Long userId, Long spendingId, SpendingRequest request);
   void deleteSpending(Long userId, Long spendingId);
 }

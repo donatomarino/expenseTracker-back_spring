@@ -6,9 +6,9 @@ import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record CreateSpendingRequest(
+public record SpendingRequest(
   @NotBlank(message = "Description is required")
-  @Size(min = 4, max = 100, message = "Description must be at least 4 characters")
+  @Size(min = 4, max= 100, message = "Description must be at least 4 characters")
   String description,
 
   @NotNull(message = "Amount is required")

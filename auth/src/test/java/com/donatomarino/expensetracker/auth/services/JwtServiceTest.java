@@ -1,6 +1,8 @@
 package com.donatomarino.expensetracker.auth.services;
 
 import com.donatomarino.expensetracker.auth.entities.User;
+import com.donatomarino.expensetracker.auth.services.impl.JwtService;
+import com.donatomarino.expensetracker.auth.services.interfaces.IJwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class JwtServiceTest {
 
-  private JwtService jwtService;
+  private IJwtService jwtService;
 
   @BeforeEach
   void setUp() {

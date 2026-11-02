@@ -4,7 +4,7 @@ import com.donatomarino.expensetracker.auth.dtos.AuthRequest;
 import com.donatomarino.expensetracker.auth.dtos.AuthResponse;
 import com.donatomarino.expensetracker.auth.dtos.RegisterRequest;
 import com.donatomarino.expensetracker.auth.dtos.RegisterResponse;
-import com.donatomarino.expensetracker.auth.services.AuthService;
+import com.donatomarino.expensetracker.auth.services.interfaces.IAuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
 
-  private final AuthService authService;
+  private final IAuthService authService;
 
   /**
    * Registro de un nuevo usuario y generación de token JWT

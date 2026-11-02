@@ -55,7 +55,7 @@ public class SecurityConfig {
 
     configuration.setAllowedOrigins(List.of(
       "http://localhost:5173",
-      "https://expense-tracker-front-ze25.vercel.app"
+      "https://expense-tracker-front-ze25.vercel.app/"
     ));
 
     configuration.setAllowedMethods(

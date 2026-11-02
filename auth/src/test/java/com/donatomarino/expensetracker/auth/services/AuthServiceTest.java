@@ -6,6 +6,9 @@ import com.donatomarino.expensetracker.auth.dtos.RegisterRequest;
 import com.donatomarino.expensetracker.auth.dtos.RegisterResponse;
 import com.donatomarino.expensetracker.auth.entities.User;
 import com.donatomarino.expensetracker.auth.repositories.UserRepository;
+import com.donatomarino.expensetracker.auth.services.impl.AuthService;
+import com.donatomarino.expensetracker.auth.services.impl.JwtService;
+import com.donatomarino.expensetracker.auth.services.interfaces.IJwtService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -37,7 +40,7 @@ public class AuthServiceTest {
   private PasswordEncoder passwordEncoder;
 
   @Mock
-  private JwtService jwtService;
+  private IJwtService jwtService;
 
   @Mock
   private AuthenticationManager authenticationManager;

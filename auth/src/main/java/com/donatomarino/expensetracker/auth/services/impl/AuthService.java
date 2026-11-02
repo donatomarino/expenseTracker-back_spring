@@ -1,4 +1,4 @@
-package com.donatomarino.expensetracker.auth.services;
+package com.donatomarino.expensetracker.auth.services.impl;
 
 import com.donatomarino.expensetracker.auth.dtos.AuthRequest;
 import com.donatomarino.expensetracker.auth.dtos.AuthResponse;
@@ -6,6 +6,8 @@ import com.donatomarino.expensetracker.auth.dtos.RegisterRequest;
 import com.donatomarino.expensetracker.auth.dtos.RegisterResponse;
 import com.donatomarino.expensetracker.auth.entities.User;
 import com.donatomarino.expensetracker.auth.repositories.UserRepository;
+import com.donatomarino.expensetracker.auth.services.interfaces.IAuthService;
+import com.donatomarino.expensetracker.auth.services.interfaces.IJwtService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,11 +27,11 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthService implements IAuthService {
 
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
-  private final JwtService jwtService;
+  private final IJwtService jwtService;
   private final AuthenticationManager authenticationManager;
 
   @Value("${app.jwt.expiration:86400000}")

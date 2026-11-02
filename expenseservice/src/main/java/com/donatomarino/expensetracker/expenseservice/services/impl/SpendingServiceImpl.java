@@ -156,7 +156,7 @@ public class SpendingServiceImpl implements ISpendingService {
 
   @Override
   @Transactional
-  public SpendingResponse addNewSpending(Long userId, CreateSpendingRequest request) {
+  public SpendingResponse addNewSpending(Long userId, SpendingRequest request) {
     Spending newSpending = Spending.builder()
       .userId(userId)
       .description(request.description())
@@ -170,7 +170,7 @@ public class SpendingServiceImpl implements ISpendingService {
 
   @Override
   @Transactional
-  public SpendingResponse updateSpendingById(Long userId, Long spendingId, UpdateSpendingRequest request) {
+  public SpendingResponse updateSpendingById(Long userId, Long spendingId, SpendingRequest request) {
     Spending spending = findSpendingByIdAndUser(spendingId, userId);
 
     // Update data

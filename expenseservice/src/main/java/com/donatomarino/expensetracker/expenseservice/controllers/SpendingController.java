@@ -5,7 +5,6 @@ import com.donatomarino.expensetracker.expenseservice.services.interfaces.ISpend
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,7 +51,7 @@ public class SpendingController {
    */
   @PostMapping
   public ResponseEntity<SpendingResponse> addSpending(Authentication authentication,
-                                                      @Valid @RequestBody CreateSpendingRequest request
+                                                      @Valid @RequestBody SpendingRequest request
   ) {
     Long userId = getAuthenticatedUserId(authentication);
     SpendingResponse response = this.spendingService.addNewSpending(userId, request);
@@ -71,7 +70,7 @@ public class SpendingController {
   @PutMapping("/{id}")
   public ResponseEntity<SpendingResponse> updateSpending(Authentication authentication,
                                                          @PathVariable Long id,
-                                                         @Valid @RequestBody UpdateSpendingRequest request
+                                                         @Valid @RequestBody SpendingRequest request
   ) {
     Long userId = getAuthenticatedUserId(authentication);
     SpendingResponse response = this.spendingService.updateSpendingById(userId, id, request);
