@@ -4,7 +4,6 @@ import com.donatomarino.expensetracker.auth.dtos.AuthRequest;
 import com.donatomarino.expensetracker.auth.dtos.AuthResponse;
 import com.donatomarino.expensetracker.auth.dtos.RegisterRequest;
 import com.donatomarino.expensetracker.auth.dtos.RegisterResponse;
-import com.donatomarino.expensetracker.auth.services.impl.JwtService;
 import com.donatomarino.expensetracker.auth.services.interfaces.IAuthService;
 import com.donatomarino.expensetracker.auth.services.interfaces.IJwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;

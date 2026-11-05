@@ -98,27 +98,27 @@ public class AuthService implements IAuthService {
     return new AuthResponse(jwtToken, name, jwtExpiration);
   }
 
-  /**
-   * Refresh token
-   *
-   * @param authHeader return new JWT token
-   */
-  public AuthResponse refreshToken(String authHeader) {
-    // Check that the header is valid
-    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
-    }
+  // /**
+  //  * Refresh token
+  //  *
+  //  * @param authHeader return new JWT token
+  //  */
+  // public AuthResponse refreshToken(String authHeader) {
+  //   // Check that the header is valid
+  //   if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+  //     throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid token");
+  //   }
 
-    String oldToken = authHeader.substring(7);
-    String userEmail = jwtService.getUsername(oldToken);
+  //   String oldToken = authHeader.substring(7);
+  //   String userEmail = jwtService.getUsername(oldToken);
 
-    User user = findUserByEmail(userEmail);
-    String name = user.getFullName().split(" ")[0];
+  //   User user = findUserByEmail(userEmail);
+  //   String name = user.getFullName().split(" ")[0];
 
-    // Generate new token
-    String newToken = generateToken(user);
-    return new AuthResponse(newToken, name, jwtExpiration);
-  }
+  //   // Generate new token
+  //   String newToken = generateToken(user);
+  //   return new AuthResponse(newToken, name, jwtExpiration);
+  // }
 
   /**
    * Find user by email

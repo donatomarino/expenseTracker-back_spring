@@ -43,17 +43,17 @@ public class AuthController {
     return ResponseEntity.ok(this.authService.authenticate(request));
   }
 
-  /**
-   * Refrescar el token y crear nuevo
-   *
-   * @param authHeader
-   * @return ResponseEntity con el nuevo token JWT o un error si el token es inválido o ha expirado
-   */
-  @PostMapping("/refresh")
-  public ResponseEntity<AuthResponse> refresh(
-    @RequestHeader("Authorization") String authHeader
-  ) {
-    return ResponseEntity.ok(this.authService.refreshToken(authHeader));
-  }
+  // /**
+  //  * Refrescar el token y crear nuevo
+  //  *
+  //  * @param authHeader
+  //  * @return ResponseEntity con el nuevo token JWT o un error si el token es inválido o ha expirado
+  //  */
+  // @PostMapping("/refresh")
+  // public ResponseEntity<AuthResponse> refresh(
+  //   @RequestHeader("Authorization") String authHeader
+  // ) {
+  //   return ResponseEntity.ok(this.authService.refreshToken(authHeader));
+  // }
 
 }
